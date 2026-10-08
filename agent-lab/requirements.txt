@@ -1,0 +1,75 @@
+# ============================================================
+# 从 0 到 1 学 Agent 开发 · 依赖清单
+# 用法（在已激活的虚拟环境里执行）：
+#     pip install -r requirements.txt
+# 国内建议加镜像，快很多：
+#     pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+# ============================================================
+#
+# ⚠️ Python 版本要求：3.12 或 3.13
+#    不要用 3.14 —— crewai(第6周) 声明 requires_python = ">=3.10,<3.14"
+#    3.14 上装 crewai 会失败。langgraph 本身支持 >=3.10。
+#
+# ------------------------------------------------------------
+# 【本机已验证可用的命令 · 2026-10-08】
+#
+# 当前项目目录：C:\Users\Serein\agent-learn-plan\agent-lab
+# 虚拟环境：已创建（Python 3.12.13），位于 .venv\
+#
+# ① 激活环境
+#    PowerShell :  .\.venv\Scripts\Activate.ps1
+#    CMD        :  .venv\Scripts\activate.bat
+#    Git Bash   :  source .venv/Scripts/activate
+#    （激活成功后提示符前会出现 (.venv)）
+#
+# ② 若 PowerShell 报「禁止运行脚本」，先执行一次：
+#    Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+#
+# ③ 本机 3.12 由 uv 管理，py -3.12 匹配不到。重建环境用：
+#    "C:\Users\Serein\AppData\Roaming\uv\python\cpython-3.12.13-windows-x86_64-none\python.exe" -m venv .venv
+#
+# ④ 已安装版本（前 4 周所需，均已验证可导入）
+#    langgraph 1.2.14 / langchain-core 1.6.7 / openai 3.26.0
+#    pydantic 2.13.5 / httpx 0.28.1 / requests 2.34.2 / jinja2 3.1.6 / python-dotenv 1.2.4
+#
+# ⑤ 第 5~7 周开始时再补装（体积大，现在不用装）：
+#    pip install numpy chromadb fastapi "uvicorn[standard]" pydantic-settings -i https://pypi.tuna.tsinghua.edu.cn/simple
+#
+# ------------------------------------------------------------
+
+# ── 第 1 周：环境与 API 调用 ──────────────────────────────
+openai>=1.30.0              # LLM API 调用（兼容 DeepSeek/通义/智谱）
+python-dotenv>=1.0.0        # 管理 .env 里的 API Key
+requests>=2.31.0            # 同步 HTTP 请求
+httpx>=0.27.0               # 异步 HTTP 请求（Day 3 用）
+
+# ── 第 2 周：Prompt 工程 ─────────────────────────────────
+pydantic>=2.7.0             # JSON Schema 校验（Day 11 用）
+jinja2>=3.1.0               # 复杂 Prompt 模板（Day 12 用）
+
+# ── 第 3~4 周：Agent 核心与框架 ──────────────────────────
+langgraph>=0.2.0            # 状态图式 Agent 框架（Day 16~24）★ 当前报错缺这个
+langchain-core>=0.3.0       # langgraph 的底层依赖（会被自动装上）
+
+# ── 第 5 周：RAG 知识库 ──────────────────────────────────
+numpy>=1.26.0               # 向量与余弦相似度计算
+chromadb>=0.5.0             # 本地轻量向量数据库（Day 32 用）
+
+# ── 第 6 周：多 Agent 协作 ───────────────────────────────
+crewai>=0.30.0              # 多角色协作框架（Day 39~41）★ 需 Python <3.14
+
+# ── 第 7 周：工程化与部署 ────────────────────────────────
+fastapi>=0.110.0            # 把 Agent 封装成 HTTP 接口
+uvicorn[standard]>=0.29.0   # ASGI 服务器，跑 FastAPI
+pydantic-settings>=2.2.0    # 配置管理（Day 46 用）
+
+# ── 第 8 周：部署 ────────────────────────────────────────
+# Docker 不走 pip，需另外安装 Docker Desktop
+
+# ============================================================
+# 快速自检（装完后执行，全部打印 OK 就说明环境没问题）
+# ------------------------------------------------------------
+# python -c "import openai, pydantic, langgraph, numpy; print('OK: core')"
+# python -c "from langgraph.graph import StateGraph, END; print('OK: langgraph')"
+# python -c "import fastapi, uvicorn; print('OK: web')"
+# ============================================================
